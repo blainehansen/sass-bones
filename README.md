@@ -2,7 +2,9 @@
 
 > A sass framework that completely reenvisions the way we build websites. Focused on unification and cleanliness.
 
----
+This repository is under construction.
+
+<!-- ---
 
 ```bash
 npm install --save sass-bones
@@ -242,4 +244,4 @@ so, all componenents are created as abstract types, with abstract sub-types, and
 				@extend %bn-gallery-img-caption
 ```
 
-Here, each of these blocks simply takes on the role of an existing abstract component definition, without having any extra classes added to the elements in the template. And since they just are filling in, the selector names can stay short. And since they are nested, they don't have to be very specific.
+Here, each of these blocks simply takes on the role of an existing abstract component definition, without having any extra classes added to the elements in the template. And since they just are filling in, the selector names can stay short. And since they are nested, they don't have to be very specific. -->
