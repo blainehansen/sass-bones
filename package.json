@@ -1,6 +1,6 @@
 {
   "name": "sass-bones",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A sass framework focused on unification and cleanliness.",
   "main": "src/bones.sass",
   "scripts": {
