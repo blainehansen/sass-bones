@@ -1,0 +1,39 @@
+{
+  "name": "sass-bones",
+  "version": "0.0.0",
+  "description": "A sass framework focused on unification and cleanliness.",
+  "main": "src/bones.sass",
+  "scripts": {
+    "postversion": "git push origin master && git push origin master --tags && npm publish",
+    "output-dev": "node-sass ./dev/_dev.sass ./dev/output.css -q",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blainehansen/sass-bones"
+  },
+  "keywords": [
+    "sass",
+    "scss",
+    "framework",
+    "responsive",
+    "design",
+    "typography",
+    "typographic",
+    "scale",
+    "vertical",
+    "rhythm",
+    "grid"
+  ],
+  "author": {
+    "name": "Blaine Hansen",
+    "email": "faichenshing@gmail.com",
+    "url": "http://blainehansen.co/"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^3.5.0",
+    "node-sass": "^4.5.3",
+    "sassaby": "^2.1.1"
+  }
+}

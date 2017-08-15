@@ -1,0 +1,8 @@
+@function ru($multiple)
+	@return 1rem * $multiple * $bn-line-height-ratio
+
+@function ru-px($pixels)
+	@if not unit($pixels) == px
+		@error "px-ru only accepts arguments in px"
+
+	@return 1rem * ($pixels / $bn-base-font-size)

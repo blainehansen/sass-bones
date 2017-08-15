@@ -1,0 +1,17 @@
+@import '../variables'
+
+
+@import '../utils/pow'
+
+@mixin type-scale($name: 0)
+	$scale-number: $name
+	@if type-of($name) == 'string'
+		$scale-number: map-get($bn-type-scale-shorthands, $name)
+		@if not $scale-number
+			@error "The type-scale shorthand you've passed doesn't exist in your shorthand list: #{$name}"
+
+	$font-size: pow($bn-type-scale-number, $scale-number) * 1rem
+	$times-in: ceil(($font-size / $bn-line-height-ratio) + $bn-minimum-leading)
+
+	font-size: $font-size
+	line-height: $times-in * $bn-line-height-ratio

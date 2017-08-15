@@ -1,0 +1,55 @@
+// #container
+// 	.thing.two stuff
+// 	.thing.two other
+// 	.thing.two other
+// 	.thing.three other
+// 	.thing.two hello
+// 	.thing.two things
+
+
+
+/// this code allows margin-based gutters
+
+*
+	box-sizing: border-box
+
+#container
+	background-color: red
+	width: 100%
+	display: flex
+
+	$gutter: 10px
+
+	padding-left: calc(5rem + #{$gutter / 2})
+	padding-right: calc(5rem + #{$gutter / 2})
+	.thing
+		flex: 0 1 auto
+		background-color: green
+		border: 1px solid black
+
+		&.two
+			width: calc((100% / 6) - #{$gutter})
+		&.three
+			width: calc((100% / 4) - #{$gutter})
+	
+		margin-right: $gutter / 2
+		margin-left: $gutter / 2
+
+///
+
+
+
+
+@import '~sass-deployables'
+
+%bn-block-box
+	+dy-deployable()
+
+	+dy-define-state(block-size, 'xs-12')
+	// margin is used for the left and right side push
+
+	// gutter is used in calc to increase the right and left margin, 
+
+	+dy-output-calc(width, dy-call(bn-grid-eval, 'this.block-size'), '-', dy-call(bn-ru-eval, 'this.gutter'))
+
+	+dy-output-calc(margin-right, dy-call(bn-grid-eval, 'this.block-size'), '-', dy-call(bn-ru-eval, 'this.gutter'))
