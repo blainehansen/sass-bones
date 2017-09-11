@@ -1,11 +1,12 @@
 {
   "name": "sass-bones",
   "version": "0.0.1",
-  "description": "A sass framework focused on unification and cleanliness.",
+  "description": "A sass interface framework focused on unification and cleanliness.",
   "main": "src/bones.sass",
   "scripts": {
     "postversion": "git push origin master && git push origin master --tags && npm publish",
-    "output-dev": "node-sass ./dev/_dev.sass ./dev/output.css -q",
+    "dev": "node-sass ./dev/dev.sass ./dev/dev.css -q",
+    "dev-sink": "node-sass ./dev/sink.sass ./dev/sink.css -q && node ./dev/sink.js",
     "test": "mocha"
   },
   "repository": {
@@ -32,8 +33,10 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "fs": "0.0.1-security",
     "mocha": "^3.5.0",
     "node-sass": "^4.5.3",
+    "pug": "^2.0.0-rc.4",
     "sassaby": "^2.1.1"
   }
 }

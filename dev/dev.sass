@@ -1,0 +1,25 @@
+// @import "../src/rhythm/type"
+
+// $bn-line-height-ratio: 5 / 4
+
+// $bn-type-scale-shorthands: (hero: 5, title: 3, leading: 1, normal: 0, fine: -1)
+
+// $bn-type-scale-number: $bn-type-scale-perfect-fourth
+
+// $bn-minimum-leading: 0.125rem
+
+// html
+// 	font-size: 16px
+
+
+// .stuff
+// 	+type-scale
+// 	+type-scale(hero)
+// 	+type-scale(fine)
+
+
+@import '../src/tokens/tokens'
+
+
+.stuff
+	+bn-responsive(color, (lg-skip: red, lg-only: blue))

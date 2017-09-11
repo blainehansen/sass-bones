@@ -1,28 +1,83 @@
-// #container
-// 	.thing.two stuff
-// 	.thing.two other
-// 	.thing.two other
-// 	.thing.three other
-// 	.thing.two hello
-// 	.thing.two things
-
-
-
-/// this code allows margin-based gutters
-
 *
 	box-sizing: border-box
 
-#container
+
+body
+	margin: 0
+	padding: 0
+
+@mixin -attr-x($attr, $value)
+	#{$attr}-left: $value
+	#{$attr}-right: $value
+
+@mixin -attr-y($attr, $value)
+	#{$attr}-top: $value
+	#{$attr}-bottom: $value
+
+
+@mixin margin-x($margin)
+	+-attr-x(margin, $margin)
+
+@mixin margin-y($margin)
+	+-attr-y(margin, $margin)
+
+@mixin padding-x($padding)
+	+-attr-x(padding, $padding)
+
+@mixin padding-y($padding)
+	+-attr-y(padding, $padding)
+	
+
+
+@mixin bn-block-shell($size: 12, $push: null, $external-gutter: null, $gutter: null)
+	&:after
+		clear: both
+		content: ""
+		display: block
+
+	$division-of-columns: 12 / $size
+	$percent-width: 100% / $division-of-columns
+
+	@if $external-gutter
+		width: calc(#{$percent-width} - #{$external-gutter * 2})
+		
+		$remaining-margin: (100% - $percent-width) / 2
+		+margin-x(calc(#{$remaining-margin} + #{$external-gutter}))
+		+margin-y($external-gutter)
+
+	@else
+		width: $percent-width
+		margin: auto
+
+	@if $gutter
+		padding: $gutter / 2
+
+
+@mixin bn-column-shell($size: 12, $gutter: null)
+	float: left
+	display: inline-block
+
+	$division-of-columns: 12 / $size
+	$percent-width: 100% / $division-of-columns
+
+	@if $gutter
+		width: calc(#{$percent-width} - #{$gutter})
+		margin: $gutter / 2
+
+	@else
+		width: $percent-width
+
+
+@mixin bn-column-holder($gutter: null, $column-selector: '.col', $column-pattern: '', $column-size: '')
 	background-color: red
 	width: 100%
-	display: flex
+	// display: flex
 
 	$gutter: 10px
 
 	padding-left: calc(5rem + #{$gutter / 2})
 	padding-right: calc(5rem + #{$gutter / 2})
-	.thing
+	#{$child-selector}
 		flex: 0 1 auto
 		background-color: green
 		border: 1px solid black
@@ -34,22 +89,3 @@
 	
 		margin-right: $gutter / 2
 		margin-left: $gutter / 2
-
-///
-
-
-
-
-@import '~sass-deployables'
-
-%bn-block-box
-	+dy-deployable()
-
-	+dy-define-state(block-size, 'xs-12')
-	// margin is used for the left and right side push
-
-	// gutter is used in calc to increase the right and left margin, 
-
-	+dy-output-calc(width, dy-call(bn-grid-eval, 'this.block-size'), '-', dy-call(bn-ru-eval, 'this.gutter'))
-
-	+dy-output-calc(margin-right, dy-call(bn-grid-eval, 'this.block-size'), '-', dy-call(bn-ru-eval, 'this.gutter'))

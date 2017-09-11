@@ -1,0 +1,25 @@
+@function filter($list, $value: null)
+	$result: ()
+
+	@each $item in $list
+		@if $item != $value
+			$result: append($result, $item)
+
+	@return $result
+
+@function list-slice($list, $start-at, $end-at: null)
+	$give-list: ()
+	$list-length: length($list)
+
+	@if $end-at < 0
+		$end-at: $list-length + ($end-at + 1)
+
+	@if not $end-at
+		$end-at: $list-length
+	@else if $end-at < 0
+		$end-at: $list-length + $end-at
+
+	@for $i from $start-at through $end-at
+		$give-list: append($give-list, nth($list, $i))
+
+	@return $give-list

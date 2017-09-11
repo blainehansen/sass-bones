@@ -1,18 +1,14 @@
-get basic grid thoughts put together
+figure out bones/skin separation
 
-[sass-bones]
-grid
-
-typography mixins
-typographic scale
-
-rhythm units
-
-
-additive box model
-box coercion
-
-flexbox shorthands
-
-abstract component syntax
-"hanger" methodology
+[sass-bones, R1-clunky-functional]
+docs
+- X overall additive box model
+-- X shell vs holder philosophy
+- X abstract vs concrete
+- X grid
+- X responsive tokens
+- rhythm
+- typography
+- colors
+- abstract layout components
+- mixables

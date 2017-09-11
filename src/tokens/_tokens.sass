@@ -1,0 +1,163 @@
+@import '../utils/string'
+@import '../utils/list'
+
+// @function explode-responsive-token-list($token-list)
+// 	$token-list: str-replace($token-list, ',')
+
+// 	$token-list: str-split($token-list, ' ')
+// 	$token-list: filter($token-list, '')
+
+// 	@return $token-list
+
+
+// @function arg-ize-token($token)
+// 	$first-open-paren-index: str-index($token, '(')
+
+// 	$responsive: str-slice($token, 1, $first-open-paren-index - 1)
+// 	@debug $responsive
+// 	$args: str-slice($token, $first-open-paren-index + 1, -2)
+// 	@debug $args
+
+// 	@return ($responsive, $args)
+
+
+@function explode-token($token)
+	@if str-index($token, ' ')
+		@error "Responsive tokens can't contain spaces: #{$token}"
+	@else if not str-index($token, '-')
+		@return ($token)
+
+	@return str-split($token, '-')
+
+$-modifier-list: ('up', 'down', 'only', 'skip')
+
+// $bn-breakpoints: (
+// 	xs: 0px,
+// 	sm: 576px,
+// 	md: 768px,
+// 	lg: 992px,
+// 	xl: 1200px,
+// )
+
+$-breakpoint-ranges: (xs: (null, 575px), sm: (576px, 767px), md: (768px, 991px), lg: (992px, 1199px), xl: (1200px, null))
+
+@function bp-bound($breakpoint, $bound)
+	$bp-pair: map-get($-breakpoint-ranges, $breakpoint)
+
+	@if not $bp-pair
+		@error "Breakpoint #{$breakpoint} doesn't exist."
+
+	@if $bound == 'lower'
+		@return nth($bp-pair, 1)
+
+	@if $bound == 'upper'
+		@return nth($bp-pair, 2)
+
+	@error "Bound #{$bound} doesn't exist."
+
+
+@function bn-media($args...)
+	$token-list: null
+
+	@if length($args) == 1
+		$token-list: explode-token(nth($args, 1))
+	@else
+		$token-list: $args
+
+
+	$token-list-length: length($token-list)
+
+	@if $token-list-length > 3
+		@error "There are too many arguments in this responsive token: #{$token-list}"
+	@if $token-list-length == 0
+		@error "This reponsive token is empty: #{$args}"
+
+
+	$modifier: 'up'
+	// check if it's either a range or a modifier
+	@if $token-list-length != 1
+		$last-item: nth($token-list, -1)
+
+		// check if modifier
+		@if index($-modifier-list, $last-item)
+			$modifier: $last-item
+			$token-list: list-slice($token-list, 1, -2)
+		// it's a range
+		@else
+			$modifier: 'only'
+
+	// else it's just a single breakpoint
+
+	$bottom-breakpoint: nth($token-list, 1)
+
+	$is-range: length($token-list) == 2
+	$top-breakpoint: if($is-range, nth($token-list, 2), $bottom-breakpoint)
+
+
+	@if $modifier == 'up'
+		// if up, just a min-width
+		// inside min-width of lower bound of bottom
+		@if $bottom-breakpoint == 'xs'
+			@return null
+
+		@return '(min-width: #{bp-bound($bottom-breakpoint, lower)})'
+
+	@else if $modifier == 'down'
+		// if down, just a max-width
+		// inside max-width of upper bound of top
+		@if $top-breakpoint == 'xl'
+			@return null
+
+		@return '(max-width: #{bp-bound($top-breakpoint, upper)})'
+
+	@else if $modifier == 'only'
+		// if only, a min-width and max-width pointing inwards
+		// inside min-width of lower bound of bottom, inside max-width of upper bound of top
+		$bottom-portion: null
+		@if $bottom-breakpoint != 'xs'
+			$bottom-portion: '(min-width: #{bp-bound($bottom-breakpoint, lower)})'
+
+		$top-portion: null
+		@if $top-breakpoint != 'xl'
+			$top-portion: '(max-width: #{bp-bound($top-breakpoint, upper)})'
+
+		$portions: ($bottom-portion, $top-portion)
+		$portions: filter($portions)
+		@return str-join($portions, ' and ', null)
+
+	@else if $modifier == 'skip'
+		// if skip, a max-width and min-width pointing outwards
+		// outside max-width of lower bound of bottom, outside min-width of upper bound of top
+		@if $bottom-breakpoint == 'xs' and $top-breakpoint == 'xl'
+			@error "Skipping the range xs-xl will result in these attributes never being applied."
+
+		$bottom-portion: null
+		@if $bottom-breakpoint != 'xs'
+			$bottom-portion: '(max-width: #{bp-bound($bottom-breakpoint, lower) - 1})'
+
+		$top-portion: null
+		@if $top-breakpoint != 'xl'
+			$top-portion: '(min-width: #{bp-bound($top-breakpoint, upper) + 1})'
+
+		$portions: ($bottom-portion, $top-portion)
+		$portions: filter($portions)
+		@return str-join($portions, ' and ', null)
+
+	@else
+		@error "Responsive token modifier #{$modifier} doesn't exist."
+
+
+@mixin bn-media($args...)
+	$query: bn-media($args...)
+	@if not $query
+		@content
+
+	@else
+		@media #{$query}
+			@content
+
+
+@mixin bn-responsive($attr, $token-map)
+	@each $token, $value in $token-map
+		+bn-media($token)
+			#{$attr}: $value

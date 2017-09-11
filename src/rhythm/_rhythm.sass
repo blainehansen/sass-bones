@@ -3,6 +3,6 @@
 
 @function ru-px($pixels)
 	@if not unit($pixels) == px
-		@error "px-ru only accepts arguments in px"
+		@error "ru-px only accepts arguments in px"
 
 	@return 1rem * ($pixels / $bn-base-font-size)
